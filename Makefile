@@ -1,21 +1,20 @@
 CC = gcc -Wall -pedantic
-BUILD = build
-OBJ = $(BUILD)/lib.o
-MAIN = main.c
-LIB = lib.c
-EXE = $(BUILD)/main
 
-all: lib
-	$(CC) -o $(EXE) $(OBJ) $(MAIN)
+build_dir:
+	mkdir -p build
 
-build:
-	mkdir -p $(BUILD)
+element: build_dir
+	$(CC) -c element.c -o build/element.o
 
-lib: build
-	$(CC) -c -o $(OBJ) $(LIB)
+partition: build_dir
+	$(CC) -c partition.c -o build/partition.o
 
-clean:
-	rm -rf $(BUILD)
+test_partition: element partition
+	$(CC) build/element.o build/partition.o test_partition.c -o build/test_partition
 
-run:
-	./$(EXE)
+quicksort: element partition
+	$(CC) -c quicksort.c -o build/quicksort.o
+
+test_quicksort: quicksort
+	$(CC) build/element.o build/partition.o build/quicksort.o test_quicksort.c -o build/test_quicksort
+	
